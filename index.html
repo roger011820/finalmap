@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Free Location Picker</title>
+  <title>Simple Location Picker</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -23,28 +23,14 @@
       text-align: center;
     }
 
-    .form-container {
-      max-width: 400px;
-      margin: 30px auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
-    }
-
-    input, button {
-      width: calc(100% - 2px);
-      padding: 10px;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 16px;
-    }
-
     button {
+      padding: 12px 20px;
+      margin: 20px;
+      font-size: 16px;
       background-color: #4CAF50;
       color: white;
       border: none;
+      border-radius: 6px;
       cursor: pointer;
     }
 
@@ -61,7 +47,6 @@
 
     #confirmBtn {
       display: none;
-      margin-top: 10px;
     }
 
     #finalResult {
@@ -95,15 +80,9 @@
 </head>
 <body>
 
-  <h2>Free Location Picker</h2>
+  <h2>Find My Location</h2>
 
-  <div class="form-container" id="formSection">
-    <input type="text" id="businessName" placeholder="BUSINESS NAME" required>
-    <input type="text" id="ownerName" placeholder="NAME OF OWNER" required>
-    <input type="text" id="contact" placeholder="CONTACT NUMBER" required>
-
-    <button onclick="setLocationFromGPS()">Track My Location</button>
-  </div>
+  <button onclick="setLocationFromGPS()">Track My Location</button>
 
   <div id="map"></div>
   <button id="confirmBtn" onclick="confirmLocation()">Confirm Location</button>
@@ -111,13 +90,9 @@
   <div id="finalResult">
     <img id="finalImage" src="" alt="Captured Map Image">
     <div class="final-details">
-      <h3>Final Location Details</h3>
-      <p><strong>Business Name:</strong> <span id="showBusinessName"></span></p>
-      <p><strong>Owner Name:</strong> <span id="showOwnerName"></span></p>
-      <p><strong>Contact Number:</strong> <span id="showContact"></span></p>
+      <h3>Coordinates</h3>
       <p><strong>Latitude:</strong> <span id="showLat"></span></p>
       <p><strong>Longitude:</strong> <span id="showLng"></span></p>
-
       <button onclick="saveDetails()">Save</button>
     </div>
   </div>
@@ -128,17 +103,14 @@
 
     function setLocationFromGPS() {
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.getCurrentPosition(function (position) {
           const lat = position.coords.latitude;
           const lon = position.coords.longitude;
 
-          document.getElementById("formSection").style.display = "none";
           document.getElementById("map").style.display = "block";
-
           initMap(lat, lon);
-
           document.getElementById("confirmBtn").style.display = "inline-block";
-        }, function(error) {
+        }, function (error) {
           alert("Unable to retrieve your location. Please ensure GPS is enabled.");
         });
       } else {
@@ -157,7 +129,7 @@
     }
 
     function confirmLocation() {
-      leafletImage(map, function(err, canvas) {
+      leafletImage(map, function (err, canvas) {
         if (!err) {
           document.getElementById("finalImage").src = canvas.toDataURL("image/png");
         }
@@ -166,10 +138,6 @@
         document.getElementById("confirmBtn").style.display = "none";
         document.getElementById("finalResult").style.display = "flex";
 
-        document.getElementById("showBusinessName").innerText = document.getElementById("businessName").value;
-        document.getElementById("showOwnerName").innerText = document.getElementById("ownerName").value;
-        document.getElementById("showContact").innerText = document.getElementById("contact").value;
-
         const currentPos = marker.getLatLng();
         document.getElementById("showLat").innerText = currentPos.lat.toFixed(6);
         document.getElementById("showLng").innerText = currentPos.lng.toFixed(6);
@@ -177,8 +145,8 @@
     }
 
     function saveDetails() {
-      alert("Location details saved!");
-      // Add AJAX or PHP code here to save data to your database
+      alert("Coordinates saved!");
+      // Add AJAX or PHP save logic here
     }
   </script>
 
